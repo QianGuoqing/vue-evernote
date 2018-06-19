@@ -53,7 +53,7 @@
                 </FormItem>
                 <FormItem>
                   <div class="button-group">
-                    <Button class="login-button" type="primary">注册</Button>
+                    <Button @click="onRegister" class="login-button" type="primary">注册</Button>
                     <Button @click="registerCancel" class="cancel-button" type="error">取消</Button>
                   </div>
                 </FormItem>
@@ -76,7 +76,7 @@
                 </FormItem>
                 <FormItem>
                   <div class="button-group">
-                    <Button class="login-button" type="primary">登陆</Button>
+                    <Button @click="onLogin" class="login-button" type="primary">登陆</Button>
                     <Button @click="loginCancel" class="cancel-button" type="error">取消</Button>
                   </div>
                 </FormItem>
@@ -90,13 +90,11 @@
 </template>
 
 <script>
-  import { getDataByPost } from '../../common/js/request.js'
-  getDataByPost('/auth/logins', { username: 'hunger', password: '123456' }).then(res => {
-    console.log(res)
-  }).catch(err => {
-    console.log(err)
+  import { getDataByPost, getDataByGet } from '../../common/js/request.js'
+  import { API_AUTH, API_LOGIN, API_REGISTER } from '../../common/js/apis.js'
+  getDataByGet(API_AUTH).then(res => {
+    console.log('/auth', res.data)
   })
-
   export default {
     name: 'Login',
     data() {
@@ -147,15 +145,45 @@
       }
     },
     methods: {
+      onLogin() {
+        getDataByPost(API_LOGIN, {
+          username: this.login.username,
+          password: this.login.password
+        }).then(res => {
+          res = res.data
+          this.$Message.success(res.msg)
+          this._clearLogin()
+        }).catch(err => {
+          this.$Message.error('登录失败-用户名或者密码错误')
+        })
+      },
+      onRegister() {
+        getDataByPost(API_REGISTER, {
+          username: this.register.username,
+          password: this.register.password
+        }).then(res => {
+          res = res.data
+          this.$Message.success(res.msg)
+          this._clearRegister()
+        }).catch(err => {
+          this.$Message.error('注册失败-用户名以重复')
+        })
+      },
       loginCancel() {
-        this.login.username = ''
-        this.login.password = ''
+        this._clearLogin()
         this.$Message.error('取消登陆');
       },
       registerCancel() {
-        this.register.username = ''
-        this.register.password = '' 
+        this._clearRegister()
         this.$Message.error('取消注册')
+      },
+      _clearLogin() {
+        this.login.username = ''
+        this.login.password = ''
+      },
+      _clearRegister() {
+        this.register.username = ''
+        this.register.password = ''
       }
     }
   }
