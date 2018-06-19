@@ -90,6 +90,13 @@
 </template>
 
 <script>
+  import { getDataByPost } from '../../common/js/request.js'
+  getDataByPost('/auth/logins', { username: 'hunger', password: '123456' }).then(res => {
+    console.log(res)
+  }).catch(err => {
+    console.log(err)
+  })
+
   export default {
     name: 'Login',
     data() {
