@@ -206,6 +206,7 @@
     width 100%
     height 100%
     background-color $mask-color
+    z-index 100
     .login-container
       display flex
       flex-flow wrap
