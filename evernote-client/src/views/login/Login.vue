@@ -152,7 +152,11 @@
         }).then(res => {
           res = res.data
           this.$Message.success(res.msg)
+          this.$store.commit('setUsername', this.login.username)
           this._clearLogin()
+          this.$router.push({
+            path: '/notebook-list'
+          })
         }).catch(err => {
           this.$Message.error('登录失败-用户名或者密码错误')
         })

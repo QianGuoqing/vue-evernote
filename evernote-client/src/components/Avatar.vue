@@ -5,14 +5,11 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
   export default {
     name: 'Avatar',
-    data() {
-      return {
-        username: '未登录'
-      }
-    },
     computed: {
+      ...mapState(['username']),
       capitalName() {
         return this.username.substring(0, 1)
       }

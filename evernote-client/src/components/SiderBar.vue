@@ -15,7 +15,7 @@
         <span class="item-text">废纸篓</span>
       </li>
     </ul>
-    <div class="icon-logout">
+    <div class="icon-logout" @click="onLogout">
       <Icon type="log-out"></Icon>
       <span class="item-text">退出</span>
     </div>
@@ -24,11 +24,33 @@
 
 <script>
   import Avatar from './Avatar.vue'
+  import { getDataByGet } from '../common/js/request.js'
+  import { API_LOGOUT, API_AUTH } from '../common/js/apis.js'
   export default {
     name: 'SiderBar',
     components: {
       Avatar
-    }
+    },
+    methods: {
+      onLogout() {
+        getDataByGet(API_AUTH).then(res => {
+          res = res.data
+          console.log('siderbar auth', res)
+          if (res.isLogin) {
+            getDataByGet(API_LOGOUT).then(res => {
+              res = res.data
+              this.$Message.success(res.msg)
+              this.$store.commit('setUsername', '未登录')
+              this.$router.push({
+                path: '/login'
+              })
+            })
+          } else {
+            this.$Message.error('尚未登录')
+          }
+        })
+      }
+    },
   }
 </script>
 
