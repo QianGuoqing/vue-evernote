@@ -8,7 +8,7 @@
       </li>
       <li class="do-item">
         <Icon type="ios-paper" />
-        <span class="item-text">笔记本</span>
+        <router-link tag="span" to="/notebook-list" class="item-text">笔记本</router-link>
       </li>
       <li class="do-item">
         <Icon type="trash-b" />
