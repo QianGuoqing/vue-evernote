@@ -1,32 +1,20 @@
 <template>
   <div class="notebook-list">
     <div class="operation-banner">
-      <Button icon="plus" type="ghost">新建笔记本</Button>
+      <Button @click="addNewNotebook" icon="plus" type="ghost">新建笔记本</Button>
     </div>
     <div class="notebook-list-wrapper">
-      <Alert class="note-label">笔记本列表 (<span class="list-count">10</span>)</Alert>
+      <Alert class="note-label">笔记本列表 (<span class="list-count">{{ notebookTotal }}</span>)</Alert>
       <ul class="note-list">
-        <li class="note-item">
+        <li class="note-item" v-for="notebook in notebooksList" :key="notebook.id">
           <div class="icon-name">
             <Icon type="ios-paper" />
-            <span class="note-title">笔记本标题1</span>
-            <span class="note-count">3</span>
+            <span class="note-title">{{ notebook.title }}</span>
+            <span class="note-count">{{ notebook.noteCounts }}</span>
           </div>
           <div class="date-operation">
             <span class="date">3天前</span>
-            <Button size="small" class="note-delete" type="error">删除</Button>
-            <Button size="small" class="note-edit" type="success">编辑</Button>
-          </div>
-        </li>
-        <li class="note-item">
-          <div class="icon-name">
-            <Icon type="ios-paper" />
-            <span class="note-title">笔记本标题1</span>
-            <span class="note-count">3</span>
-          </div>
-          <div class="date-operation">
-            <span class="date">3天前</span>
-            <Button size="small" class="note-delete" type="error">删除</Button>
+            <Button size="small" @click="doDeleteNotebook(notebook.id)" class="note-delete" type="error">删除</Button>
             <Button size="small" class="note-edit" type="success">编辑</Button>
           </div>
         </li>
@@ -36,7 +24,7 @@
 </template>
 
 <script>
-  import { getDataByGet } from '../../common/js/request.js'
+  import { getDataByGet, getNotebooks, addNotebook, deleteNotebook } from '../../common/js/request.js'
   import { API_AUTH } from '../../common/js/apis.js'
   export default {
     name: 'NotebookList',
@@ -49,8 +37,48 @@
             path: '/login'
           })
         }
-      })
-    }
+      }),
+      this._getNotebookList()
+    },
+    data() {
+      return {
+        notebooksList: [],
+        notebookTotal: 0
+      }
+    },
+    methods: {
+      addNewNotebook() {
+        addNotebook('测试笔记本aaa').then(res => {
+          res = res.data
+          this.$Message.success(res.msg)
+          this._getNotebookList()
+          console.log('add notebook', res)
+        }).catch(err => {
+          console.log('add notebook', err)
+        })
+      },
+      doDeleteNotebook(id) {
+        deleteNotebook(id).then(res => {
+          res = res.data
+          this.$Message.success(res.msg)
+          this._getNotebookList()
+          console.log('delete notebook', res)
+        }).catch(err => {
+          this.$Message.error('删除笔记本失败')
+          console.log('delete notebook', err)
+        })
+      },
+      _getNotebookList() {
+        getNotebooks().then(res => {
+          res = res.data
+          this.notebooksList = res.data
+          this.notebookTotal = this.notebooksList.length
+          console.log('notebook list', this.notebooksList)
+        }).catch(err => {
+          console.log(err)
+        })
+      }
+    },
   }
 </script>
 
