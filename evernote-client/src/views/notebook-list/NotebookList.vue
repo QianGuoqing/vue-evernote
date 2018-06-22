@@ -13,7 +13,7 @@
             <span class="note-count">{{ notebook.noteCounts }}</span>
           </div>
           <div class="date-operation">
-            <span class="date">3天前</span>
+            <span class="date">{{ _formateData(notebook.createdAt) }}</span>
             <Button size="small" @click="doDeleteNotebook(notebook.id)" class="note-delete" type="error">删除</Button>
             <Button size="small" class="note-edit" type="success">编辑</Button>
           </div>
@@ -26,6 +26,7 @@
 <script>
   import { getDataByGet, getNotebooks, addNotebook, deleteNotebook } from '../../common/js/request.js'
   import { API_AUTH } from '../../common/js/apis.js'
+  import { friendlyDate } from '../../common/js/util.js'
   export default {
     name: 'NotebookList',
     created() {
@@ -68,10 +69,14 @@
           console.log('delete notebook', err)
         })
       },
+      _formateData(dateStr) {
+        return friendlyDate(dateStr)
+      },
       _getNotebookList() {
         getNotebooks().then(res => {
           res = res.data
           this.notebooksList = res.data
+          this.notebooksList.sort((a, b) => a.createdAt < b.createdAt)
           this.notebookTotal = this.notebooksList.length
           console.log('notebook list', this.notebooksList)
         }).catch(err => {
