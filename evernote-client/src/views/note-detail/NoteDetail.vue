@@ -1,6 +1,11 @@
 <template>
   <div class="notebook-detail">
-    笔记详情页
+    <p>
+      笔记id: {{ $route.query.noteId }}
+    </p>
+    <p>
+      笔记本id: {{ $route.query.notebookId }}
+    </p>
   </div>
 </template>
 
@@ -24,5 +29,6 @@
 </script>
 
 <style lang="stylus" scoped>
-
+  .notebook-detail
+    margin-left 100px
 </style>

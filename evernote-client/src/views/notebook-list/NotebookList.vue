@@ -13,7 +13,7 @@
     <div class="notebook-list-wrapper">
       <Alert class="note-label">笔记本列表 (<span class="list-count">{{ notebookTotal }}</span>)</Alert>
       <ul class="note-list">
-        <li class="note-item" v-for="notebook in notebooksList" :key="notebook.id">
+        <router-link tag="li" :to="`/note?notebookId=${notebook.id}&noteId=1`" class="note-item" v-for="notebook in notebooksList" :key="notebook.id">
           <div class="icon-name">
             <Icon type="ios-paper" />
             <span class="note-title">{{ notebook.title }}</span>
@@ -31,7 +31,7 @@
               <Input v-model="editNotebookTitle" icon="ios-paper"></Input>
             </Modal>
           </div>
-        </li>
+        </router-link>
       </ul>
     </div>
   </div>

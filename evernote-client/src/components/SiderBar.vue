@@ -2,14 +2,14 @@
   <div class="sider-bar">
     <avatar></avatar>
     <ul class="do-list">
-      <li class="do-item">
+      <router-link tag="li" to="/note" class="do-item">
         <Icon type="document-text" />
         <span class="item-text">笔记</span>
-      </li>
-      <li class="do-item">
+      </router-link>
+      <router-link tag="li" to="/notebook-list" class="do-item">
         <Icon type="ios-paper" />
-        <router-link tag="span" to="/notebook-list" class="item-text">笔记本</router-link>
-      </li>
+        <span class="item-text">笔记本</span>
+      </router-link>
       <li class="do-item">
         <Icon type="trash-b" />
         <span class="item-text">废纸篓</span>
