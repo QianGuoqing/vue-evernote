@@ -4,7 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import Login from '../views/login/Login.vue'
 import NotebookList from '../views/notebook-list/NotebookList.vue'
 import NoteDetail from '../views/note-detail/NoteDetail.vue'
-import TrashDetail from '../views/notebook-detail/NotebookDetail.vue'
+import TrashDetail from '../views/trash-detail/TrashDetail.vue'
 
 Vue.use(Router)
 

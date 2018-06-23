@@ -1,5 +1,6 @@
 <template>
   <div class="notebook-detail">
+    <note-sidebar></note-sidebar>
     <p>
       笔记id: {{ $route.query.noteId }}
     </p>
@@ -10,10 +11,14 @@
 </template>
 
 <script>
+  import NoteSidebar from '../../components/NoteSidebar.vue'
   import { getDataByGet } from '../../common/js/request.js'
   import { API_AUTH } from '../../common/js/apis.js'
   export default {
     name: 'NotebookDetail',
+    components: {
+      NoteSidebar
+    },
     created() {
       getDataByGet(API_AUTH).then(res => {
         res = res.data
@@ -30,5 +35,8 @@
 
 <style lang="stylus" scoped>
   .notebook-detail
+    height 100%
     margin-left 100px
+    display flex
+    align-items stretch
 </style>
