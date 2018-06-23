@@ -1,7 +1,14 @@
 <template>
   <div class="notebook-list">
     <div class="operation-banner">
-      <Button @click="addNewNotebook" icon="plus" type="ghost">新建笔记本</Button>
+      <Button @click="showAddNotebookModal" icon="plus" type="ghost">新建笔记本</Button>
+      <Modal
+        v-model="addNewNotebookModal"
+        title="输入笔记本标题"
+        @on-ok="addNewNotebookOk"
+        @on-cancel="addNewNotebookCancel">
+        <Input v-model="newNotebookTitle" icon="ios-paper"></Input>
+      </Modal>
     </div>
     <div class="notebook-list-wrapper">
       <Alert class="note-label">笔记本列表 (<span class="list-count">{{ notebookTotal }}</span>)</Alert>
@@ -15,7 +22,14 @@
           <div class="date-operation">
             <span class="date">{{ _formateData(notebook.createdAt) }}</span>
             <Button size="small" @click="doDeleteNotebook(notebook.id)" class="note-delete" type="error">删除</Button>
-            <Button size="small" class="note-edit" type="success">编辑</Button>
+            <Button size="small" @click="showEditNotebookModal(notebook)" class="note-edit" type="success">编辑</Button>
+            <Modal
+              v-model="editNotebookModal"
+              title="输入笔记本标题"
+              @on-ok="editNotebookOk"
+              @on-cancel="editNotebookCancel">
+              <Input v-model="editNotebookTitle" icon="ios-paper"></Input>
+            </Modal>
           </div>
         </li>
       </ul>
@@ -24,32 +38,50 @@
 </template>
 
 <script>
-  import { getDataByGet, getNotebooks, addNotebook, deleteNotebook } from '../../common/js/request.js'
-  import { API_AUTH } from '../../common/js/apis.js'
-  import { friendlyDate } from '../../common/js/util.js'
+  import {
+    getDataByGet,
+    getNotebooks,
+    addNotebook,
+    deleteNotebook,
+    updateNotebook
+  } from '../../common/js/request.js'
+  import {
+    API_AUTH
+  } from '../../common/js/apis.js'
+  import {
+    friendlyDate
+  } from '../../common/js/util.js'
   export default {
     name: 'NotebookList',
     created() {
       getDataByGet(API_AUTH).then(res => {
-        res = res.data
-        if (!res.isLogin) {
-          this.$Message.error('没有权限-请先登录')
-          this.$router.push({
-            path: '/login'
-          })
-        }
-      }),
-      this._getNotebookList()
+          res = res.data
+          if (!res.isLogin) {
+            this.$Message.error('没有权限-请先登录')
+            this.$router.push({
+              path: '/login'
+            })
+          }
+        }),
+        this._getNotebookList()
     },
     data() {
       return {
         notebooksList: [],
-        notebookTotal: 0
+        notebookTotal: 0,
+        addNewNotebookModal: false,
+        editNotebookModal: false,
+        newNotebookTitle: '',
+        editNotebookTitle: '',
+        editId: ''
       }
     },
     methods: {
-      addNewNotebook() {
-        addNotebook('测试笔记本aaa').then(res => {
+      showAddNotebookModal() {
+        this.addNewNotebookModal = true
+      },
+      addNewNotebookOk() {
+        addNotebook(this.newNotebookTitle).then(res => {
           res = res.data
           this.$Message.success(res.msg)
           this._getNotebookList()
@@ -58,15 +90,46 @@
           console.log('add notebook', err)
         })
       },
-      doDeleteNotebook(id) {
-        deleteNotebook(id).then(res => {
+      addNewNotebookCancel() {
+        this.$Message.error('取消新建笔记本')
+      },
+      showEditNotebookModal(notebook) {
+        this.editId = notebook.id
+        this.editNotebookTitle = notebook.title
+        this.editNotebookModal = true
+      },
+      editNotebookOk() {
+        updateNotebook(this.editId, this.editNotebookTitle).then(res => {
           res = res.data
           this.$Message.success(res.msg)
           this._getNotebookList()
-          console.log('delete notebook', res)
+          console.log('update notebook', res)
         }).catch(err => {
-          this.$Message.error('删除笔记本失败')
+          this.$Message.error('更新笔记本失败')
           console.log('delete notebook', err)
+        })
+      },
+      editNotebookCancel() {
+        this.$Message.error('取消编辑笔记本')
+      },
+      doDeleteNotebook(id) {
+        this.$Modal.confirm({
+          title: 'Title',
+          content: '确定要删除此笔记本吗？',
+          onOk: () => {
+            deleteNotebook(id).then(res => {
+              res = res.data
+              this.$Message.success(res.msg)
+              this._getNotebookList()
+              console.log('delete notebook', res)
+            }).catch(err => {
+              this.$Message.error('删除笔记本失败')
+              console.log('delete notebook', err)
+            })
+          },
+          onCancel: () => {
+            this.$Message.info('取消删除')
+          }
         })
       },
       _formateData(dateStr) {
