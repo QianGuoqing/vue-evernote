@@ -1,5 +1,14 @@
 import axios from 'axios'
-import { API_GET_NOTEBOOK, API_ADD_NOTEBOOK, API_UPDATE_NOTEBOOK, API_DELETE_NOTEBOOK } from './apis'
+import { 
+  API_GET_NOTEBOOK, 
+  API_ADD_NOTEBOOK, 
+  API_UPDATE_NOTEBOOK, 
+  API_DELETE_NOTEBOOK,
+  API_ADD_NOTE,
+  API_GET_NOTE,
+  API_DELETE_NOTE,
+  API_UPDATE_NOTE
+} from './apis'
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.defaults.baseURL = 'http://note-server.hunger-valley.com'
@@ -63,8 +72,58 @@ export function updateNotebook(id, title) {
 
 export function deleteNotebook(id) {
   return new Promise((resolve, reject) => {
-    let API = API_UPDATE_NOTEBOOK.replace(':notebookId', id)
+    let API = API_DELETE_NOTEBOOK.replace(':notebookId', id)
     axios.delete(API).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function addNote(notebookId, title, content) {
+  return new Promise((resolve, reject) => {
+    let API = API_ADD_NOTE.replace(':notebookId', notebookId)
+    axios.post(API, {
+      title: title,
+      content: content
+    }).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function getNote(notebookId) {
+  return new Promise((resolve, reject) => {
+    let API = API_GET_NOTE.replace(':notebookId', notebookId)
+    axios.get(API).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function deleteNote(noteId) {
+  return new Promise((resolve, reject) => {
+    let API = API_DELETE_NOTE.replace(':noteId', noteId)
+    axios.delete(API).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function updateNote(noteId, title, content) {
+  return new Promise((resolve, reject) => {
+    let API = API_UPDATE_NOTE.replace(':noteId', noteId)
+    axios.patch(API, {
+      title: title,
+      content: content
+    }).then(res => {
       resolve(res)
     }).catch(err => {
       reject(err)

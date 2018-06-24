@@ -7,3 +7,7 @@ export let API_GET_NOTEBOOK = '/notebooks'
 export let API_ADD_NOTEBOOK = '/notebooks' /** POST */
 export let API_UPDATE_NOTEBOOK = '/notebooks/:notebookId' /** PATCH */
 export let API_DELETE_NOTEBOOK = '/notebooks/:notebookId' /** DELETE */
+export let API_ADD_NOTE = '/notes/to/:notebookId' /** POST */
+export let API_GET_NOTE = '/notes/from/:notebookId'
+export let API_DELETE_NOTE = '/notes/:noteId' /** DELETE */
+export let API_UPDATE_NOTE = '/notes/:noteId' /** UPDATE */

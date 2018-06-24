@@ -26,30 +26,16 @@
 </template>
 
 <script>
+  import { getNotebooks } from '../common/js/request.js'
+  import { friendlyDate } from '../common/js/util.js'
   export default {
     name: 'NoteSiderbar',
+    created() {
+      this._getNotebooks()
+    },
     data() {
       return {
-        notebooks: [{
-            id: 1,
-            title: 'hello1'
-          },
-          {
-            id: 2,
-            title: 'hello2',
-            updatedAtFriendly: '三分钟前'
-          },
-          {
-            id: 3,
-            title: '第一个笔记本',
-            updatedAtFriendly: '刚刚'
-          },
-          {
-            id: 4,
-            title: '第二个笔记本',
-            updatedAtFriendly: '3分钟前'
-          }
-        ],
+        notebooks: [],
         notes: [{
             id: 11,
             title: '第一个笔记',
@@ -61,6 +47,17 @@
             updatedAtFriendly: '3分钟前'
           }
         ]
+      }
+    },
+    methods: {
+      _getNotebooks() {
+        getNotebooks().then(res => {
+          res = res.data
+          this.notebooks = res.data
+          console.log('note sidebar notebooklist', this.notebooks)
+        }).catch(err => {
+          this.$Message.error('获取笔记本失败')
+        })
       }
     },
   }
