@@ -73,6 +73,9 @@
         cursor pointer
         transition all .3s
         padding-left 20px
+        &.sidebar-active
+          background-color $theme-color
+          color #fff
         &:hover
           color #fff
           background-color $theme-color
