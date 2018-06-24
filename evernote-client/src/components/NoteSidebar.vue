@@ -90,6 +90,7 @@
     width 300px
     height 100%
     background-color $notebook-bg
+    margin-left 100px
     .note-header
       text-align center
       padding 15px 0
