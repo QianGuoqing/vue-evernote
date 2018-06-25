@@ -6,7 +6,10 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     isLogin: false,
-    username: '未登录'
+    username: '未登录',
+    noteId: -1,
+    notebookId: -1,
+    currentNote: {}
   },
   mutations: {
     changeIsLogin(state, payload) {
@@ -14,6 +17,15 @@ const store = new Vuex.Store({
     },
     setUsername(state, payload) {
       state.username = payload
+    },
+    setNoteId(state, noteId) {
+      state.noteId = noteId
+    },
+    setNotebookId(state, notebookId) {
+      state.notebookId = notebookId
+    },
+    setCurrentNote(state, note) {
+      state.currentNote = note
     }
   },
   getters: {

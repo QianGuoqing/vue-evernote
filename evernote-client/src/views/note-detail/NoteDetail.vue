@@ -1,16 +1,23 @@
 <template>
   <div class="notebook-detail">
     <note-sidebar></note-sidebar>
-    <div class="note-detail">
+    <div class="choose-note" v-if="!currentNote.id">
+      选择左侧笔记
+    </div>
+    <div v-else class="note-detail">
       <div class="note-header">
         <div class="date-related">
           <Alert class="date-banner" type="success">
-            <span class="create-time">创建时间: {{ currentNote.createdAtFriendly }}</span>
-            <span class="update-time">更新时间: {{ currentNote.updatedAtFriendly }}</span>
-            <span class="note-status">{{ currentNote.statusText }}</span>
+            <span class="create-time">创建时间: {{ _formateDate(currentNote.createdAt) }}</span>
+            <span class="update-time">更新时间: {{ _formateDate(currentNote.updatedAt) }}</span>
+            <span class="note-status">已保存</span>
           </Alert>
         </div>
         <div class="operation">
+          <Button type="primary" size="small">
+            <Icon type="play"></Icon>
+            保存
+          </Button>
           <Button type="success" size="small">
             <Icon type="paper-airplane"></Icon>
             To Markdown
@@ -36,8 +43,10 @@
 
 <script>
   import NoteSidebar from '../../components/NoteSidebar.vue'
-  import { getDataByGet } from '../../common/js/request.js'
+  import { getDataByGet, getNote } from '../../common/js/request.js'
   import { API_AUTH } from '../../common/js/apis.js'
+  import { friendlyDate } from '../../common/js/util.js'
+  import { mapState } from 'vuex'
   export default {
     name: 'NotebookDetail',
     components: {
@@ -56,13 +65,14 @@
     },
     data() {
       return {
-        currentNote: {
-          title: '我的笔记',
-          content: '笔记内容',
-          createdAtFriendly: '1天前',
-          updatedAtFriendly: '刚刚',
-          statusText: '未更新'
-        }
+      }
+    },
+    computed: {
+      ...mapState(['currentNote'])
+    },
+    methods: {
+      _formateDate(dateStr) {
+        return friendlyDate(dateStr)
       }
     },
   }
@@ -76,6 +86,10 @@
     display flex
     align-items stretch
     overflow hidden
+    .choose-note
+      font-size 40px
+      text-align center
+      padding 20px
     .note-detail
       flex 1
       height 100%

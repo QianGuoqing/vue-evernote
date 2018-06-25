@@ -23,6 +23,9 @@
         res = res.data
         this.$store.commit('changeIsLogin', res.isLogin)
       })
+      let { noteId, notebookId } = this.$route.query
+      this.$store.commit('setNoteId', noteId)
+      this.$store.commit('setNotebookId', notebookId)
     }
   }
 </script>

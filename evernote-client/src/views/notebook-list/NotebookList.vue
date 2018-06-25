@@ -13,7 +13,7 @@
     <div class="notebook-list-wrapper">
       <Alert class="note-label">笔记本列表 (<span class="list-count">{{ notebookTotal }}</span>)</Alert>
       <ul class="note-list">
-        <router-link tag="li" :to="`/note?notebookId=${notebook.id}&noteId=1`" class="note-item" v-for="notebook in notebooksList" :key="notebook.id">
+        <li @click="changeIDinState(notebook.id)" class="note-item" v-for="notebook in notebooksList" :key="notebook.id">
           <div class="icon-name">
             <Icon type="ios-paper" />
             <span class="note-title">{{ notebook.title }}</span>
@@ -31,7 +31,7 @@
               <Input v-model="editNotebookTitle" icon="ios-paper"></Input>
             </Modal>
           </div>
-        </router-link>
+        </li>
       </ul>
     </div>
   </div>
@@ -77,6 +77,15 @@
       }
     },
     methods: {
+      changeIDinState(notebookId) {
+        console.log('changeIDinState');
+        this.$store.commit('setNotebookId', notebookId)
+        this.$store.commit('setNoteId', 1)
+        this.$store.commit('setCurrentNote', {})
+        this.$router.push({
+          path: `/note?notebookId=${notebookId}&noteId=1`
+        })
+      },
       showAddNotebookModal() {
         this.addNewNotebookModal = true
       },

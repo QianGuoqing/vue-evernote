@@ -19,10 +19,10 @@
       <div class="title-tab">标题</div>
     </div>
     <ul class="note-list">
-      <router-link :to="`/note?noteId=${note.id}&notebookId=${currentNotebook.id}`" class="note-item" v-for="note in notes" :key="note.id">
+      <li @click="doRouterNoteCurrentNotebook(currentNotebook.id, note.id)" class="note-item" v-for="note in notes" :key="note.id">
         <div class="note-update-time">{{ _formateDate(note.updatedAt) }}</div>
         <div class="note-title">{{ note.title }}</div>
-      </router-link>
+      </li>
     </ul>
   </div>
 </template>
@@ -39,13 +39,25 @@
       return {
         notebooks: [],
         notes: [],
-        currentNotebook: {}
+        currentNotebook: {},
+        currentNote: {}
       }
     },
     methods: {
+      doRouterNoteCurrentNotebook(notebookId, noteId) {
+        this.$store.commit('setNotebookId', notebookId)
+        this.$store.commit('setNoteId', noteId)
+        this.$router.push({
+          path: `/note?noteId=${noteId}&notebookId=${notebookId}`
+        })
+        this.currentNote = this.notes.find(note => note.id == this.$store.state.noteId) || {}
+        this.$store.commit('setCurrentNote', this.currentNote)
+        console.log('note siderbar get note', this.currentNote) 
+      },
       doGetNote(notebookId) {
         this._getNote(notebookId)
         this.currentNotebook = this.notebooks.find(notebook => notebook.id == notebookId)
+        this.$store.commit('setCurrentNote', {})
       },
       _getNote(notebookId) {
         getNote(notebookId).then(res => {
