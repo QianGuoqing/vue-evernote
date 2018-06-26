@@ -18,9 +18,15 @@
             <Icon type="play"></Icon>
             保存
           </Button>
-          <Button type="success" size="small">
-            <Icon type="paper-airplane"></Icon>
-            To Markdown
+          <Button @click="changeEditMarkdown" type="success" size="small">
+            <span v-if="isEdit">
+              <Icon type="paper-airplane"></Icon>
+              转Markdown
+            </span>
+            <span v-else>
+              <Icon type="edit"></Icon>
+              编辑
+            </span>
           </Button>
           <Button type="error" size="small">
             <Icon type="trash-b"></Icon>
@@ -30,11 +36,11 @@
       </div>
       <div class="note-content">
         <div class="note-title">
-          <input type="text" :value="currentNote.title" class="title-input" placeholder="输入笔记标题">
+          <input type="text" v-model:value="currentNote.title" class="title-input" placeholder="输入笔记标题">
         </div>
         <div class="note-editor">
-          <textarea v-if="true" class="editor-content" placeholder="输入笔记内容" :value="currentNote.content"></textarea>
-          <div class="note-content" v-else></div>
+          <textarea v-if="isEdit" class="editor-content" placeholder="输入笔记内容" v-model:value="currentNote.content"></textarea>
+          <div class="note-content" v-html="markdown2html" v-else></div>
         </div>
       </div>
     </div>
@@ -47,6 +53,10 @@
   import { API_AUTH } from '../../common/js/apis.js'
   import { friendlyDate } from '../../common/js/util.js'
   import { mapState } from 'vuex'
+  import MarkdownIt from 'markdown-it'
+
+  let md = new MarkdownIt()
+
   export default {
     name: 'NotebookDetail',
     components: {
@@ -65,14 +75,23 @@
     },
     data() {
       return {
+        isEdit: true,
+        noteTitle: '',
+        noteContent: ''
       }
     },
     computed: {
-      ...mapState(['currentNote'])
+      ...mapState(['currentNote']),
+      markdown2html() {
+        return md.render(this.currentNote.content)
+      }
     },
     methods: {
       _formateDate(dateStr) {
         return friendlyDate(dateStr)
+      },
+      changeEditMarkdown() {
+        this.isEdit = !this.isEdit
       }
     },
   }
@@ -127,4 +146,6 @@
             color #333
             border none
             outline none
+          .note-content
+            padding 20px
 </style>

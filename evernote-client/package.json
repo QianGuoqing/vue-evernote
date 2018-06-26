@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "iview": "^2.14.2",
+    "markdown-it": "^8.4.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "vue": "^2.5.2",
