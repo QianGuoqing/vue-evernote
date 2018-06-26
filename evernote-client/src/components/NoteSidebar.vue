@@ -10,9 +10,12 @@
           <DropdownItem v-for="notebook in notebooks" :key="notebook.id">
             <span @click="doGetNote(notebook.id)">{{ notebook.title }}</span>
           </DropdownItem>
+          <DropdownItem>
+            <span @click="toTrash">废纸篓</span>
+          </DropdownItem>
         </DropdownMenu>
       </Dropdown>
-      <Button class="add-note-btn" type="ghost" size="small">添加笔记</Button>
+      <Button @click="doAddNote" class="add-note-btn" type="ghost" size="small">添加笔记</Button>
     </div>
     <div class="note-tab">
       <div class="update-time-tab">更新时间</div>
@@ -28,7 +31,7 @@
 </template>
 
 <script>
-  import { getNotebooks, getNote } from '../common/js/request.js'
+  import { getNotebooks, getNote, addNote } from '../common/js/request.js'
   import { friendlyDate } from '../common/js/util.js'
   export default {
     name: 'NoteSiderbar',
@@ -44,6 +47,21 @@
       }
     },
     methods: {
+      toTrash() {
+        this.$router.push({
+          path: '/trash'
+        })
+      },
+      doAddNote() {
+        addNote(this.$route.query.notebookId, '未命名', '').then(res => {
+          res = res.data
+          console.log(res)
+          this.$Message.success(res.msg)
+          this._getNote(this.$route.query.notebookId)
+        }).catch(err => {
+          this.$Message.error('添加笔记失败')
+        })
+      },
       doRouterNoteCurrentNotebook(notebookId, noteId) {
         this.$store.commit('setNotebookId', notebookId)
         this.$store.commit('setNoteId', noteId)
@@ -58,6 +76,9 @@
         this._getNote(notebookId)
         this.currentNotebook = this.notebooks.find(notebook => notebook.id == notebookId)
         this.$store.commit('setCurrentNote', {})
+        this.$router.push({
+          path: `/note?notebookId=${notebookId}`
+        })
       },
       _getNote(notebookId) {
         getNote(notebookId).then(res => {

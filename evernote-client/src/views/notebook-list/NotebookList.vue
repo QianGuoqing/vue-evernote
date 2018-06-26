@@ -21,8 +21,8 @@
           </div>
           <div class="date-operation">
             <span class="date">{{ _formateData(notebook.createdAt) }}</span>
-            <Button size="small" @click="doDeleteNotebook(notebook.id)" class="note-delete" type="error">删除</Button>
-            <Button size="small" @click="showEditNotebookModal(notebook)" class="note-edit" type="success">编辑</Button>
+            <Button size="small" @click.stop.prevent="doDeleteNotebook(notebook.id)" class="note-delete" type="error">删除</Button>
+            <Button size="small" @click.stop.prevent="showEditNotebookModal(notebook)" class="note-edit" type="success">编辑</Button>
             <Modal
               v-model="editNotebookModal"
               title="输入笔记本标题"

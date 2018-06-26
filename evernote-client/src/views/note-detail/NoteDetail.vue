@@ -10,16 +10,16 @@
           <Alert class="date-banner" type="success">
             <span class="create-time">创建时间: {{ _formateDate(currentNote.createdAt) }}</span>
             <span class="update-time">更新时间: {{ _formateDate(currentNote.updatedAt) }}</span>
-            <span class="note-status">已保存</span>
+            <span class="note-status">{{ statusText }}</span>
           </Alert>
         </div>
         <div class="operation">
-          <Button type="primary" size="small">
+          <Button @click="doUpdateNote(currentNote)" type="primary" size="small">
             <Icon type="play"></Icon>
             保存
           </Button>
           <Button @click="changeEditMarkdown" type="success" size="small">
-            <span v-if="isEdit">
+            <span v-if="!isEdit">
               <Icon type="paper-airplane"></Icon>
               转Markdown
             </span>
@@ -28,7 +28,7 @@
               编辑
             </span>
           </Button>
-          <Button type="error" size="small">
+          <Button @click="doDeleteNote" type="error" size="small">
             <Icon type="trash-b"></Icon>
             删除
           </Button>
@@ -39,7 +39,7 @@
           <input type="text" v-model:value="currentNote.title" class="title-input" placeholder="输入笔记标题">
         </div>
         <div class="note-editor">
-          <textarea v-if="isEdit" class="editor-content" placeholder="输入笔记内容" v-model:value="currentNote.content"></textarea>
+          <textarea v-if="!isEdit" class="editor-content" placeholder="输入笔记内容" v-model:value="currentNote.content"></textarea>
           <div class="note-content" v-html="markdown2html" v-else></div>
         </div>
       </div>
@@ -49,7 +49,7 @@
 
 <script>
   import NoteSidebar from '../../components/NoteSidebar.vue'
-  import { getDataByGet, getNote } from '../../common/js/request.js'
+  import { getDataByGet, getNote, updateNote, deleteNote } from '../../common/js/request.js'
   import { API_AUTH } from '../../common/js/apis.js'
   import { friendlyDate } from '../../common/js/util.js'
   import { mapState } from 'vuex'
@@ -76,8 +76,7 @@
     data() {
       return {
         isEdit: true,
-        noteTitle: '',
-        noteContent: ''
+        statusText: '已完成'
       }
     },
     computed: {
@@ -92,6 +91,33 @@
       },
       changeEditMarkdown() {
         this.isEdit = !this.isEdit
+        if (!this.isEdit) {
+          this.statusText = '编辑中'
+        } else {
+          this.statusText = '已完成'
+        }
+      },
+      doUpdateNote(note) {
+        updateNote(note.id, note.title, note.content).then(res => {
+          res = res.data
+          this.$Message.success(res.msg)
+          this.statusText = '已保存'
+        }).catch(err => {
+          this.$Message.error('保存失败')
+        })
+      },
+      doDeleteNote() {
+        deleteNote(this.$route.query.noteId).then(res => {
+          res = res.data
+          console.log(res)
+          this.$Message.success(res.msg)
+          this.$router.push({
+            path: `/note?notebookId=${this.$route.query.notebookId}`
+          })
+          this.$router.go(0)
+        }).catch(err => {
+          this.$Message.error('删除笔记失败')
+        })
       }
     },
   }
@@ -123,9 +149,9 @@
           position relative
           top 5px
           .update-time
-            margin-left 20px
+            margin-left 10px
           .note-status
-            margin-left 20px
+            margin-left 10px
       .note-content
         height 100%
         .note-title
@@ -146,6 +172,8 @@
             color #333
             border none
             outline none
+            line-height 20px
           .note-content
             padding 20px
+            line-height 20px
 </style>
