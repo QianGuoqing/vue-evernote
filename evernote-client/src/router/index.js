@@ -33,7 +33,7 @@ export default new Router({
       component: NoteDetail
     },
     {
-      path: '/trash/:noteId',
+      path: '/trash',
       name: 'TrashDetail',
       component: TrashDetail
     }

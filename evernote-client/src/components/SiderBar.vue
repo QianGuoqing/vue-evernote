@@ -10,10 +10,10 @@
         <Icon type="ios-paper" />
         <span class="item-text">笔记本</span>
       </router-link>
-      <li class="do-item">
+      <router-link tag="li" to="/trash" class="do-item">
         <Icon type="trash-b" />
         <span class="item-text">废纸篓</span>
-      </li>
+      </router-link>
     </ul>
     <div class="icon-logout" @click="onLogout">
       <Icon type="log-out"></Icon>
