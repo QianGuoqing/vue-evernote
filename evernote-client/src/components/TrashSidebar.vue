@@ -8,7 +8,7 @@
       <div class="title-tab">标题</div>
     </div>
     <ul class="trash-list">
-      <li class="trash-item" v-for="note in notes" :key="note.id">
+      <li @click="doRouterTrash(note)" class="trash-item" v-for="note in notes" :key="note.id">
         <div class="trash-update-time">{{ _formateDate(note.updatedAt) }}</div>
         <div class="trash-title">{{ note.title }}</div>
       </li>
@@ -17,20 +17,58 @@
 </template>
 
 <script>
-  import { getNotebooks, getNote, addNote } from '../common/js/request.js'
+  import { getTrash, getNote } from '../common/js/request.js'
   import { friendlyDate } from '../common/js/util.js'
   export default {
     name: 'TrashSiderbar',
     created() {
-
+      this._getTrashNotes()
     },
     data() {
       return {
-        notes: []
+        notes: [],
+        chooseTrashNote: {}
       }
     },
     methods: {
-      
+      doRouterTrash(note) {
+        let noteId = note.id
+        let notebookId = note.notebookId
+        this.notes.forEach((note, index) => {
+          if (note.id == noteId) {
+            this.chooseTrashNote = this.notes[index]
+          }
+        })
+        console.log('chooseTrashNote', this.chooseTrashNote)
+        this.$store.commit('setTrashNote', this.chooseTrashNote)
+        this.$router.push({
+          path: `/trash?noteId=${note.id}`
+        })
+      },
+      _getTrashNotes() {
+        getTrash().then(res => {
+          res = res.data
+          this.notes = res.data
+          this.notes.sort((a, b) => a.updatedAt > b.updatedAt)
+          console.log('get trash', this.notes)
+        }).catch(err => {
+          this.$Message.error('获取废纸篓数据失败')
+          console.log('get trash', err)
+        })
+      },
+      // _getNote(notebookId, noteId) {
+      //   getNote(notebookId).then(res => {
+      //     res = res.data
+      //     this.nNotes = res.data
+      //     this.chooseTrashNote = this.nNotes.find(note => note.id == noteId)
+      //     console.log('chooseTrashNote', this.chooseTrashNote, this.nNotes)
+      //   }).catch(err => {
+      //     this.$Message.error('获取笔记失败 in Trash Sidebar')
+      //   })
+      // },
+      _formateDate(dateStr) {
+        return friendlyDate(dateStr)
+      }
     },
   }
 </script>

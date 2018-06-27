@@ -20,6 +20,10 @@
           </Button>
         </div>
       </div>
+      <div class="trash-content">
+        <div class="trash-title">{{ trashNote.title }}</div>
+        <div class="trash-content" v-html="markdownContent"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -28,6 +32,10 @@
   import TrashSidebar from '../../components/TrashSidebar.vue'
   import { getDataByGet } from '../../common/js/request.js'
   import { API_AUTH } from '../../common/js/apis.js'
+  import { mapState } from 'vuex'
+  import MarkdownIt from 'markdown-it'
+
+  let md = new MarkdownIt()
 
   export default {
     name: 'TrashDetail',
@@ -44,6 +52,14 @@
           })
         }
       })
+    },
+    computed: {
+      ...mapState(['trashNote']),
+      markdownContent() {
+        if (!this.trashNote.content)
+          return ''
+        return md.render(this.trashNote.content)
+      }
     }
   }
 </script>
@@ -73,4 +89,10 @@
             margin-left 10px
           .note-status
             margin-left 10px
+      .trash-content
+        padding 20px
+        .trash-title
+          font-size 18px
+          font-weight 700
+          color #000
 </style>
