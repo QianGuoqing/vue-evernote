@@ -1,7 +1,7 @@
 <template>
   <div class="trash-sidebar">
     <div class="trash-header">
-      回收站
+      废纸篓
     </div>
     <div class="trash-tab">
       <div class="update-time-tab">更新时间</div>

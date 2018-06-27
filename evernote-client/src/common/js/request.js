@@ -7,7 +7,10 @@ import {
   API_ADD_NOTE,
   API_GET_NOTE,
   API_DELETE_NOTE,
-  API_UPDATE_NOTE
+  API_UPDATE_NOTE,
+  API_GET_TRASH,
+  API_CONFIRM_DELETE_NOTE,
+  API_REVERT_NOTE
 } from './apis'
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
@@ -131,3 +134,34 @@ export function updateNote(noteId, title, content) {
   })
 }
 
+export function getTrash() {
+  return new Promise((resolve, reject) => {
+    axios.get(API_GET_TRASH).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function revertNote(noteId) {
+  return new Promise((resolve, reject) => {
+    let API = API_REVERT_NOTE.replace(':noteId', noteId)
+    axios.patch(API).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function deleteTrash(noteId) {
+  return new Promise((resolve, reject) => {
+    let API = API_CONFIRM_DELETE_NOTE.replace(':noteId', noteId)
+    axios.delete(API).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
