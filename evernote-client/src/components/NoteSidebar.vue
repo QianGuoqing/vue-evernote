@@ -44,7 +44,7 @@
         notes: [],
         currentNotebook: {},
         currentNote: {},
-        liIndex: 0
+        liIndex: -1
       }
     },
     methods: {
@@ -86,6 +86,7 @@
         getNote(notebookId).then(res => {
           res = res.data
           this.notes = res.data
+          this.notes.sort((a, b) => a.updatedAt < b.updatedAt)
           if (this.notes.length === 0) {
             this.$Message.info('该笔记本下暂无笔记')
           }

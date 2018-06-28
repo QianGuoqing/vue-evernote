@@ -10,7 +10,7 @@
           </Alert>
         </div>
         <div class="operation">
-          <Button type="error" size="small">
+          <Button @click="deleteNoteCompletely" type="error" size="small">
             <Icon type="play"></Icon>
             彻底删除
           </Button>
@@ -31,7 +31,7 @@
 
 <script>
   import TrashSidebar from '../../components/TrashSidebar.vue'
-  import { getDataByGet, revertNote } from '../../common/js/request.js'
+  import { getDataByGet, revertNote, deleteTrash } from '../../common/js/request.js'
   import { API_AUTH } from '../../common/js/apis.js'
   import { friendlyDate } from '../../common/js/util.js'
   import { mapState } from 'vuex'
@@ -89,6 +89,33 @@
             })
           }).catch(err => {
             this.$Message.error('笔记恢复失败')
+          })
+        } else {
+          this.$Message.error('请选择左侧笔记后操作')
+        }
+      },
+      deleteNoteCompletely() {
+        let noteId = this.$route.query.noteId
+        if (noteId) {
+          deleteTrash(noteId).then(res => {
+            res = res.data
+            this.$Message.success(res.msg)
+            console.log(res)
+            let tempTrashNotes = [...this.allTrashNotes]
+            let iIndex = 0
+            tempTrashNotes.forEach((note, index) => {
+              if (note.id == noteId) {
+                iIndex = index
+              }
+            })
+            tempTrashNotes.splice(iIndex, 1)
+            this.$store.commit('setAllTrashNotes', tempTrashNotes)
+            this.$store.commit('setTrashNote', {})
+            this.$router.push({
+              path: '/trash'
+            })
+          }).catch(err => {
+            this.$Message.error('彻底删除笔记本失败')
           })
         } else {
           this.$Message.error('请选择左侧笔记后操作')

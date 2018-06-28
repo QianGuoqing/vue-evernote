@@ -29,7 +29,7 @@
       return {
         notes: [],
         chooseTrashNote: {},
-        liIndex: 0
+        liIndex: -1
       }
     },
     computed: {
@@ -57,7 +57,7 @@
         getTrash().then(res => {
           res = res.data
           this.notes = res.data
-          this.notes.sort((a, b) => a.updatedAt > b.updatedAt)
+          this.notes.sort((a, b) => a.updatedAt < b.updatedAt)
           this.$store.commit('setAllTrashNotes', this.notes)
           console.log('get trash', this.notes)
         }).catch(err => {
@@ -89,6 +89,7 @@
     height 100%
     background-color $notebook-bg
     margin-left 100px
+    border-right 1px solid $line-color
     .trash-header
       text-align center
       padding 15px 0
