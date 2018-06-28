@@ -8,7 +8,7 @@
       <div class="title-tab">标题</div>
     </div>
     <ul class="trash-list">
-      <li @click="doRouterTrash(note)" class="trash-item" v-for="note in notes" :key="note.id">
+      <li @click="doRouterTrash(note, index)" class="trash-item" :class="{ 'trash-item-active': index === liIndex }" v-for="(note, index) in allTrashNotes" :key="note.id">
         <div class="trash-update-time">{{ _formateDate(note.updatedAt) }}</div>
         <div class="trash-title">{{ note.title }}</div>
       </li>
@@ -19,6 +19,7 @@
 <script>
   import { getTrash, getNote } from '../common/js/request.js'
   import { friendlyDate } from '../common/js/util.js'
+  import { mapState } from 'vuex'
   export default {
     name: 'TrashSiderbar',
     created() {
@@ -27,13 +28,20 @@
     data() {
       return {
         notes: [],
-        chooseTrashNote: {}
+        chooseTrashNote: {},
+        liIndex: 0
       }
     },
+    computed: {
+      ...mapState([
+        'allTrashNotes'
+      ])
+    },
     methods: {
-      doRouterTrash(note) {
+      doRouterTrash(note, index) {
         let noteId = note.id
         let notebookId = note.notebookId
+        this.liIndex = index
         this.notes.forEach((note, index) => {
           if (note.id == noteId) {
             this.chooseTrashNote = this.notes[index]
@@ -50,6 +58,7 @@
           res = res.data
           this.notes = res.data
           this.notes.sort((a, b) => a.updatedAt > b.updatedAt)
+          this.$store.commit('setAllTrashNotes', this.notes)
           console.log('get trash', this.notes)
         }).catch(err => {
           this.$Message.error('获取废纸篓数据失败')
@@ -102,6 +111,9 @@
         border-bottom 1px solid $line-color
         cursor pointer
         transition all .3s
+        &.trash-item-active
+          background-color $theme-color
+          color #fff
         &:hover
           background-color $theme-color
           color #fff

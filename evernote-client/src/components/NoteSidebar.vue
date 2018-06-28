@@ -22,7 +22,7 @@
       <div class="title-tab">标题</div>
     </div>
     <ul class="note-list">
-      <li @click="doRouterNoteCurrentNotebook(currentNotebook.id, note.id)" class="note-item" v-for="note in notes" :key="note.id">
+      <li @click="doRouterNoteCurrentNotebook(currentNotebook.id, note.id, index)" :class="{ 'note-item-active': index === liIndex }" class="note-item" v-for="(note, index) in notes" :key="note.id">
         <div class="note-update-time">{{ _formateDate(note.updatedAt) }}</div>
         <div class="note-title">{{ note.title }}</div>
       </li>
@@ -43,7 +43,8 @@
         notebooks: [],
         notes: [],
         currentNotebook: {},
-        currentNote: {}
+        currentNote: {},
+        liIndex: 0
       }
     },
     methods: {
@@ -62,7 +63,8 @@
           this.$Message.error('添加笔记失败')
         })
       },
-      doRouterNoteCurrentNotebook(notebookId, noteId) {
+      doRouterNoteCurrentNotebook(notebookId, noteId, index) {
+        this.liIndex = index
         this.$store.commit('setNotebookId', notebookId)
         this.$store.commit('setNoteId', noteId)
         this.$router.push({
@@ -150,6 +152,9 @@
         border-bottom 1px solid $line-color
         cursor pointer
         transition all .3s
+        &.note-item-active
+          background-color $theme-color
+          color #fff
         &:hover
           background-color $theme-color
           color #fff
