@@ -15,10 +15,17 @@
         <span class="item-text">废纸篓</span>
       </router-link>
     </ul>
-    <div class="icon-logout" @click="onLogout">
+    <div class="icon-logout" @click="logoutModal = true">
       <Icon type="log-out"></Icon>
       <span class="item-text">退出</span>
     </div>
+    <Modal
+      v-model="logoutModal"
+      @on-ok="onLogout"
+      @on-cancel="cancel"
+      title="确认退出?">
+      <p>选择确认表示退出, 选择取消表示取消退出.</p>
+    </Modal>
   </div>
 </template>
 
@@ -30,6 +37,11 @@
     name: 'SiderBar',
     components: {
       Avatar
+    },
+    data() {
+      return {
+        logoutModal: false
+      }
     },
     methods: {
       onLogout() {
@@ -49,6 +61,9 @@
             this.$Message.error('尚未登录')
           }
         })
+      },
+      cancel() {
+        this.$Message.info('取消注销');
       }
     },
   }
