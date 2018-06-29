@@ -11,27 +11,35 @@
       </Modal>
     </div>
     <div class="notebook-list-wrapper">
-      <Alert class="note-label">笔记本列表 (<span class="list-count">{{ notebookTotal }}</span>)</Alert>
+      <Alert class="note-label">
+        笔记本列表 (<span class="list-count">{{ notebookTotal }}</span>)
+        <Button class="sort-button" type="success" size="small" @click="sortListByNoteCounts">按笔记数量排序</Button>
+        <Button type="success" size="small" @click="sortListByUpdate">按笔记更新时间排序</Button>
+        <Button type="success" size="small" @click="sortListByCreate">按笔记创建时间排序</Button>
+      </Alert>
       <ul class="note-list">
-        <li @click="changeIDinState(notebook.id)" class="note-item" v-for="notebook in notebooksList" :key="notebook.id">
-          <div class="icon-name">
-            <Icon type="ios-paper" />
-            <span class="note-title">{{ notebook.title }}</span>
-            <span class="note-count">{{ notebook.noteCounts }}</span>
-          </div>
-          <div class="date-operation">
-            <span class="date">{{ _formateData(notebook.createdAt) }}</span>
-            <Button size="small" @click.stop.prevent="doDeleteNotebook(notebook.id)" class="note-delete" type="error">删除</Button>
-            <Button size="small" @click.stop.prevent="showEditNotebookModal(notebook)" class="note-edit" type="success">编辑</Button>
-            <Modal
-              v-model="editNotebookModal"
-              title="输入笔记本标题"
-              @on-ok="editNotebookOk"
-              @on-cancel="editNotebookCancel">
-              <Input v-model="editNotebookTitle" icon="ios-paper"></Input>
-            </Modal>
-          </div>
-        </li>
+        <transition-group>
+          <li @click="changeIDinState(notebook.id)" class="note-item" v-for="notebook in notebooksList" :key="notebook.id">
+            <div class="icon-name">
+              <Icon type="ios-paper" />
+              <span class="note-title">{{ notebook.title }}</span>
+              <span class="note-count">{{ notebook.noteCounts }}</span>
+            </div>
+            <div class="date-operation">
+              <span class="date">创建时间: {{ _formateData(notebook.createdAt) }}</span>
+              <span class="date">更新时间: {{ _formateData(notebook.updatedAt) }}</span>
+              <Button size="small" @click.stop.prevent="doDeleteNotebook(notebook.id)" class="note-delete" type="error">删除</Button>
+              <Button size="small" @click.stop.prevent="showEditNotebookModal(notebook)" class="note-edit" type="success">编辑</Button>
+              <Modal
+                v-model="editNotebookModal"
+                title="输入笔记本标题"
+                @on-ok="editNotebookOk"
+                @on-cancel="editNotebookCancel">
+                <Input v-model="editNotebookTitle" icon="ios-paper"></Input>
+              </Modal>
+            </div>
+          </li>
+        </transition-group> 
       </ul>
     </div>
   </div>
@@ -77,6 +85,15 @@
       }
     },
     methods: {
+      sortListByNoteCounts() {
+        this.notebooksList.sort((a, b) => a.noteCounts < b.noteCounts)
+      },
+      sortListByUpdate() {
+        this.notebooksList.sort((a, b) => a.updatedAt < b.updatedAt)
+      },
+      sortListByCreate() {
+        this.notebooksList.sort((a, b) => a.createdAt < b.createdAt)
+      },
       changeIDinState(notebookId) {
         console.log('changeIDinState');
         this.$store.commit('setNotebookId', notebookId)
@@ -161,6 +178,10 @@
 
 <style lang="stylus" scoped>
   @import '../../common/stylus/variables.styl';
+
+  .sort-button
+    margin-left 20px
+
   .notebook-list
     height 100%
     margin-left 100px
@@ -207,6 +228,7 @@
             .date
               color $date-color
               margin-right 10px
+              font-size 12px
             .note-delete
               margin-right 10px
 </style>
