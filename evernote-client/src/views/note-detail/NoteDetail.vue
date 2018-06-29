@@ -6,12 +6,8 @@
     </div>
     <div v-else class="note-detail">
       <div class="note-header">
-        <div class="date-related">
-          <Alert class="date-banner" type="success">
-            <span class="create-time">创建时间: {{ _formateDate(currentNote.createdAt) }}</span>
-            <span class="update-time">更新时间: {{ _formateDate(currentNote.updatedAt) }}</span>
-            <span class="note-status">{{ statusText }}</span>
-          </Alert>
+        <div class="search-related">
+          <Input placeholder="搜索笔记..." style="width: 100%"></Input>
         </div>
         <div class="operation">
           <Button @click="doUpdateNote(currentNote)" type="primary" size="small">
@@ -35,8 +31,15 @@
         </div>
       </div>
       <div class="note-content">
+        <div class="date-related">
+          <Alert banner class="date-banner" type="success">
+            <span class="create-time">创建时间: {{ _formateDate(currentNote.createdAt) }} ({{ _fullDate(currentNote.createdAt) }})</span>
+            <span class="update-time">更新时间: {{ _formateDate(currentNote.updatedAt) }} ({{ _fullDate(currentNote.updatedAt) }})</span>
+            <span class="note-status">状态: {{ statusText }}</span>
+          </Alert>
+        </div>
         <div class="note-title">
-          <input type="text" v-model:value="currentNote.title" class="title-input" placeholder="输入笔记标题">
+          <input :disabled="isEdit" type="text" v-model:value="currentNote.title" class="title-input" placeholder="输入笔记标题">
         </div>
         <div class="note-editor">
           <textarea v-if="!isEdit" class="editor-content" placeholder="输入笔记内容" v-model:value="currentNote.content"></textarea>
@@ -51,7 +54,7 @@
   import NoteSidebar from '../../components/NoteSidebar.vue'
   import { getDataByGet, getNote, updateNote, deleteNote } from '../../common/js/request.js'
   import { API_AUTH } from '../../common/js/apis.js'
-  import { friendlyDate } from '../../common/js/util.js'
+  import { friendlyDate, getFullDate } from '../../common/js/util.js'
   import { mapState } from 'vuex'
   import MarkdownIt from 'markdown-it'
 
@@ -72,6 +75,7 @@
           })
         }
       })
+      this.$store.commit('setCurrentNote', {})
     },
     data() {
       return {
@@ -88,6 +92,9 @@
     methods: {
       _formateDate(dateStr) {
         return friendlyDate(dateStr)
+      },
+      _fullDate(dateStr) {
+        return getFullDate(dateStr)
       },
       changeEditMarkdown() {
         this.isEdit = !this.isEdit
@@ -145,15 +152,15 @@
         padding 10px 20px
         border-bottom 1px solid $line-color
         font-size 14px
-        .date-banner
-          position relative
-          top 5px
+        .search-related
+          width 60%
+      .note-content
+        height 100%
+        .date-related
           .update-time
             margin-left 10px
           .note-status
             margin-left 10px
-      .note-content
-        height 100%
         .note-title
           .title-input
             width 100%
@@ -166,13 +173,14 @@
           height 100%
           .editor-content
             width 100%
-            height 80%
+            height 75%
             padding 20px
             font-size 14px
             color #333
-            border none
+            border 1px dotted $theme-color
             outline none
             line-height 20px
+            resize none
           .note-content
             padding 20px
             line-height 20px

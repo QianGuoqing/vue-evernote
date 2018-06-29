@@ -21,3 +21,9 @@ export function friendlyDate(dateStr) {
   }
   return str
 }
+
+export function getFullDate(dateStr) {
+  let lastDotIndex = dateStr.lastIndexOf('.')
+  dateStr = dateStr.substring(0, lastDotIndex)
+  return dateStr.split('T').join(' ')
+}
