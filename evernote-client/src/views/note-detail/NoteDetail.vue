@@ -105,10 +105,12 @@
         }
       },
       doUpdateNote(note) {
+        this.$Loading.start()
         updateNote(note.id, note.title, note.content).then(res => {
           res = res.data
           this.$Message.success(res.msg)
           this.statusText = '已保存'
+          this.$Loading.finish()
         }).catch(err => {
           this.$Message.error('保存失败')
         })

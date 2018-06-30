@@ -23,7 +23,9 @@
   export default {
     name: 'TrashSiderbar',
     created() {
+      this.$Loading.start()
       this._getTrashNotes()
+      this.$Loading.finish()
     },
     data() {
       return {

@@ -62,6 +62,7 @@
   export default {
     name: 'NotebookList',
     created() {
+      this.$Loading.start()
       getDataByGet(API_AUTH).then(res => {
           res = res.data
           if (!res.isLogin) {
@@ -72,6 +73,7 @@
           }
         }),
         this._getNotebookList()
+        this.$Loading.finish()
     },
     data() {
       return {

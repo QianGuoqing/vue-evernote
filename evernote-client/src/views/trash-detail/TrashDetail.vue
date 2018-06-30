@@ -2,7 +2,7 @@
   <div class="trash-detail-wrapper">
     <trash-sidebar></trash-sidebar>
     <div class="trash-detail">
-      <div class="trash-header" v-if="$route.query.noteId">
+      <div class="trash-header" v-if="trashNote.id">
         <div class="date-related">
           <Alert class="date-banner" type="success">
             <span class="create-time">创建时间: {{ _formatDate(trashNote.createdAt) }}</span>
@@ -54,6 +54,7 @@
           })
         }
       })
+      this.$store.commit('setTrashNote', {})
     },
     computed: {
       ...mapState([
