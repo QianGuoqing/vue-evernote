@@ -15,7 +15,14 @@
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
-      <Button @click="doAddNote" class="add-note-btn" type="ghost" size="small">添加笔记</Button>
+      <Button @click="addNoteTitleModal = true" class="add-note-btn" type="ghost" size="small">添加笔记</Button>
+      <Modal
+        v-model="addNoteTitleModal"
+        title="输入新建笔记标题"
+        @on-ok="doAddNote"
+        @on-cancel="cancel">
+        <Input v-model="newNoteTitle" icon="ios-list-outline" placeholder="输入笔记标题"></Input>
+      </Modal>
     </div>
     <div class="note-tab">
       <div class="update-time-tab">更新时间</div>
@@ -44,7 +51,9 @@
         notes: [],
         currentNotebook: {},
         currentNote: {},
-        liIndex: -1
+        liIndex: -1,
+        addNoteTitleModal: false,
+        newNoteTitle: ''
       }
     },
     methods: {
@@ -54,7 +63,7 @@
         })
       },
       doAddNote() {
-        addNote(this.$route.query.notebookId, '未命名', '').then(res => {
+        addNote(this.$route.query.notebookId, this.newNoteTitle, '').then(res => {
           res = res.data
           console.log(res)
           this.$Message.success(res.msg)
@@ -62,6 +71,9 @@
         }).catch(err => {
           this.$Message.error('添加笔记失败')
         })
+      },
+      cancel() {
+        this.$Message.info('取消新建笔记')
       },
       doRouterNoteCurrentNotebook(notebookId, noteId, index) {
         this.liIndex = index
