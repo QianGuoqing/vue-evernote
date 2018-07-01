@@ -29,7 +29,7 @@
       <div class="title-tab">标题</div>
     </div>
     <ul class="note-list">
-      <li @click="doRouterNoteCurrentNotebook(currentNotebook.id, note.id, index)" :class="{ 'note-item-active': index === liIndex }" class="note-item" v-for="(note, index) in notes" :key="note.id">
+      <li @click="doRouterNoteCurrentNotebook(currentNotebook.id, note.id, index)" :class="{ 'note-item-active': index === liIndex }" class="note-item" v-for="(note, index) in allNotes" :key="note.id">
         <div class="note-update-time">{{ _formateDate(note.updatedAt) }}</div>
         <div class="note-title">{{ note.title }}</div>
       </li>
@@ -40,6 +40,7 @@
 <script>
   import { getNotebooks, getNote, addNote } from '../common/js/request.js'
   import { friendlyDate } from '../common/js/util.js'
+  import { mapState } from 'vuex'
   export default {
     name: 'NoteSiderbar',
     created() {
@@ -55,6 +56,11 @@
         addNoteTitleModal: false,
         newNoteTitle: ''
       }
+    },
+    computed: {
+      ...mapState([
+        'allNotes'
+      ])
     },
     methods: {
       toTrash() {
@@ -99,6 +105,7 @@
           res = res.data
           this.notes = res.data
           this.notes.sort((a, b) => a.updatedAt < b.updatedAt)
+          this.$store.commit('setAllNotes', this.notes)
           if (this.notes.length === 0) {
             this.$Message.info('该笔记本下暂无笔记')
           }

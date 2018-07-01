@@ -11,7 +11,8 @@ const store = new Vuex.Store({
     notebookId: -1,
     currentNote: {},
     trashNote: {},
-    allTrashNotes: []
+    allTrashNotes: [],
+    allNotes: []
   },
   mutations: {
     changeIsLogin(state, payload) {
@@ -28,6 +29,9 @@ const store = new Vuex.Store({
     },
     setCurrentNote(state, note) {
       state.currentNote = note
+    },
+    setAllNotes(state, notes) {
+      state.allNotes = notes
     },
     setTrashNote(state, note) {
       state.trashNote = note

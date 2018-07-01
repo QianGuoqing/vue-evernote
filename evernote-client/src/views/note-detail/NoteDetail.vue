@@ -84,7 +84,10 @@
       }
     },
     computed: {
-      ...mapState(['currentNote']),
+      ...mapState([
+        'currentNote',
+        'allNotes'
+      ]),
       markdown2html() {
         return md.render(this.currentNote.content)
       }
@@ -118,12 +121,20 @@
       doDeleteNote() {
         deleteNote(this.$route.query.noteId).then(res => {
           res = res.data
+          let tempNotes = [...this.allNotes]
+          let iIndex = -1
+          tempNotes.forEach((item, index) => {
+            if (item.id == this.$route.query.noteId) {
+              iIndex = index
+            }
+          })
+          tempNotes.splice(iIndex, 1)
+          this.$store.commit('setAllNotes', tempNotes)
           console.log(res)
           this.$Message.success(res.msg)
           this.$router.push({
             path: `/note?notebookId=${this.$route.query.notebookId}`
           })
-          this.$router.go(0)
         }).catch(err => {
           this.$Message.error('删除笔记失败')
         })
