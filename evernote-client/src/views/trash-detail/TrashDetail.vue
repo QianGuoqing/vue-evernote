@@ -5,15 +5,22 @@
       <div class="trash-header" v-if="trashNote.id">
         <div class="date-related">
           <Alert class="date-banner" type="success">
-            <span class="create-time">创建时间: {{ _formatDate(trashNote.createdAt) }}</span>
-            <span class="update-time">更新时间: {{ _formatDate(trashNote.updatedAt) }}</span>
+            <span class="create-time">创建时间: {{ _formatDate(trashNote.createdAt) }} ({{ _getFullDate(trashNote.createdAt) }})</span>
+            <span class="update-time">更新时间: {{ _formatDate(trashNote.updatedAt) }} ({{ _getFullDate(trashNote.updatedAt) }})</span>
           </Alert>
         </div>
         <div class="operation">
-          <Button @click="deleteNoteCompletely" type="error" size="small">
+          <Button @click="deleteCompleteModal = true" type="error" size="small">
             <Icon type="play"></Icon>
             彻底删除
           </Button>
+          <Modal
+            v-model="deleteCompleteModal"
+            title="彻底删除笔记"
+            @on-ok="deleteNoteCompletely"
+            @on-cancel="cancel">
+            <p>选择是否彻底删除笔记(彻底删除后无法恢复)?</p>
+          </Modal>
           <Button @click="recoverNote" type="success" size="small">
             <Icon type="paper-airplane"></Icon>
             恢复
@@ -33,7 +40,7 @@
   import TrashSidebar from '../../components/TrashSidebar.vue'
   import { getDataByGet, revertNote, deleteTrash } from '../../common/js/request.js'
   import { API_AUTH } from '../../common/js/apis.js'
-  import { friendlyDate } from '../../common/js/util.js'
+  import { friendlyDate, getFullDate } from '../../common/js/util.js'
   import { mapState } from 'vuex'
   import MarkdownIt from 'markdown-it'
 
@@ -56,6 +63,11 @@
       })
       this.$store.commit('setTrashNote', {})
     },
+    data() {
+      return {
+        deleteCompleteModal: false
+      }
+    },  
     computed: {
       ...mapState([
         'trashNote',
@@ -122,8 +134,14 @@
           this.$Message.error('请选择左侧笔记后操作')
         }
       },
+      cancel() {
+        this.$Message.info('取消操作')
+      },
       _formatDate(dateStr) {
         return friendlyDate(dateStr)
+      },
+      _getFullDate(dateStr) {
+        return getFullDate(dateStr)
       }
     },
   }
