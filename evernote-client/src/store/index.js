@@ -12,7 +12,8 @@ const store = new Vuex.Store({
     currentNote: {},
     trashNote: {},
     allTrashNotes: [],
-    allNotes: []
+    allNotes: [],
+    richText: ''
   },
   mutations: {
     changeIsLogin(state, payload) {
@@ -38,6 +39,9 @@ const store = new Vuex.Store({
     },
     setAllTrashNotes(state, notes) {
       state.allTrashNotes = notes
+    },
+    setRichText(state, rich) {
+      state.richText = rich
     }
   },
   getters: {

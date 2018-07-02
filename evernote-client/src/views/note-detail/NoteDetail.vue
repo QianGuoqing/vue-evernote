@@ -14,14 +14,24 @@
             <Icon type="play"></Icon>
             保存
           </Button>
-          <Button @click="changeEditMarkdown" type="success" size="small">
+          <Button :disabled="!isRichText" @click="changeEditMarkdown" type="success" size="small">
             <span v-if="!isEdit">
               <Icon type="paper-airplane"></Icon>
               转Markdown
             </span>
             <span v-else>
               <Icon type="edit"></Icon>
-              编辑
+              使用Markdown编辑
+            </span>
+          </Button>
+          <Button :disabled="!isEdit" @click="changeEditRich" type="success" size="small">
+            <span v-if="!isRichText">
+              <Icon type="paper-airplane"></Icon>
+              转富文本
+            </span>
+            <span v-else>
+              <Icon type="edit"></Icon>
+              使用富文本编辑
             </span>
           </Button>
           <Button @click="doDeleteNote" type="error" size="small">
@@ -42,8 +52,9 @@
           <input :disabled="isEdit" type="text" v-model:value="currentNote.title" class="title-input" placeholder="输入笔记标题">
         </div>
         <div class="note-editor">
+          <note-editor  v-if="!isRichText"></note-editor>
           <textarea v-if="!isEdit" class="editor-content" placeholder="输入笔记内容" v-model:value="currentNote.content"></textarea>
-          <div class="note-content" v-html="markdown2html" v-else></div>
+          <div class="note-content" v-html="editText2Html" v-else></div>
         </div>
       </div>
     </div>
@@ -52,6 +63,7 @@
 
 <script>
   import NoteSidebar from '../../components/NoteSidebar.vue'
+  import NoteEditor from './NoteEditor.vue'
   import { getDataByGet, getNote, updateNote, deleteNote } from '../../common/js/request.js'
   import { API_AUTH } from '../../common/js/apis.js'
   import { friendlyDate, getFullDate } from '../../common/js/util.js'
@@ -63,7 +75,8 @@
   export default {
     name: 'NotebookDetail',
     components: {
-      NoteSidebar
+      NoteSidebar,
+      NoteEditor
     },
     created() {
       getDataByGet(API_AUTH).then(res => {
@@ -80,7 +93,9 @@
     data() {
       return {
         isEdit: true,
-        statusText: '已完成'
+        statusText: '已完成',
+        isRichText: true,
+        editorContent: ''
       }
     },
     computed: {
@@ -88,8 +103,14 @@
         'currentNote',
         'allNotes'
       ]),
-      markdown2html() {
-        return md.render(this.currentNote.content)
+      editText2Html() {
+        if (this.isEdit) {
+          return md.render(this.currentNote.content)
+        } else if (this.isRichText) {
+          let html = this.$store.state.richText
+          console.log(html);
+          return html
+        }
       }
     },
     methods: {
@@ -102,6 +123,14 @@
       changeEditMarkdown() {
         this.isEdit = !this.isEdit
         if (!this.isEdit) {
+          this.statusText = '编辑中'
+        } else {
+          this.statusText = '已完成'
+        }
+      },
+      changeEditRich() {
+        this.isRichText = !this.isRichText
+        if (!this.isRichText) {
           this.statusText = '编辑中'
         } else {
           this.statusText = '已完成'
@@ -166,7 +195,7 @@
         border-bottom 1px solid $line-color
         font-size 14px
         .search-related
-          width 60%
+          width 40%
       .note-content
         height 100%
         .date-related
