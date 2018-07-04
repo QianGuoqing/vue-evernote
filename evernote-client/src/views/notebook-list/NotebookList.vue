@@ -71,6 +71,8 @@
             this.$router.push({
               path: '/login'
             })
+          } else {
+            this.$store.commit('setUser', res.data)
           }
         }),
         this._getNotebookList()
@@ -185,6 +187,7 @@
           this.notebooksList = res.data
           this.notebooksList.sort((a, b) => a.createdAt < b.createdAt)
           this.notebookTotal = this.notebooksList.length
+          this.searchedNotebookList = this.notebooksList
           console.log('notebook list', this.notebooksList)
         }).catch(err => {
           console.log(err)

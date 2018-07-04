@@ -59,6 +59,8 @@
           this.$router.push({
             path: '/login'
           })
+        } else {
+          this.$store.commit('setUser', res.data)
         }
       })
       this.$store.commit('setTrashNote', {})

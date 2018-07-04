@@ -153,6 +153,7 @@
           res = res.data
           this.$Message.success(res.msg)
           this.$store.commit('setUsername', this.login.username)
+          this.$store.commit('setUser', res.data)
           this._clearLogin()
           this.$router.push({
             path: '/notebook-list'

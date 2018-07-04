@@ -7,7 +7,7 @@
     <div v-else class="note-detail">
       <div class="note-header">
         <div class="search-related">
-          <Input placeholder="搜索笔记..." style="width: 100%"></Input>
+          <!-- <Input placeholder="搜索笔记..." style="width: 100%"></Input> -->
         </div>
         <div class="operation">
           <Button @click="doUpdateNote(currentNote)" type="primary" size="small">
@@ -86,6 +86,8 @@
           this.$router.push({
             path: '/login'
           })
+        } else {
+          this.$store.commit('setUser', res.data)
         }
       })
       this.$store.commit('setCurrentNote', {})

@@ -13,9 +13,13 @@ const store = new Vuex.Store({
     trashNote: {},
     allTrashNotes: [],
     allNotes: [],
-    richText: ''
+    richText: '',
+    user: {}
   },
   mutations: {
+    setUser(state, user) {
+      state.user = user
+    },
     changeIsLogin(state, payload) {
       state.isLogin = payload
     },

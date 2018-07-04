@@ -2,6 +2,10 @@
   <div class="sider-bar">
     <avatar></avatar>
     <ul class="do-list">
+      <router-link exact tag="li" to="/" class="do-item">
+        <Icon type="ios-home" />
+        <span class="item-text">信息页</span>
+      </router-link>
       <router-link tag="li" to="/note" class="do-item">
         <Icon type="document-text" />
         <span class="item-text">笔记</span>
