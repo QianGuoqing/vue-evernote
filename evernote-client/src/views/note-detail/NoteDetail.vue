@@ -182,7 +182,7 @@
     height 100%
     display flex
     align-items stretch
-    overflow hidden
+    // overflow hidden
     .choose-note
       font-size 40px
       text-align center

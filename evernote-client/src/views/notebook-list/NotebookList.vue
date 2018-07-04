@@ -132,6 +132,7 @@
           res = res.data
           this.$Message.success(res.msg)
           this._getNotebookList()
+          this.newNotebookTitle = ''
           console.log('add notebook', res)
         }).catch(err => {
           console.log('add notebook', err)
@@ -200,6 +201,7 @@
 
 <style lang="stylus" scoped>
   @import '../../common/stylus/variables.styl';
+  @import '../../common/stylus/styles.styl';
 
   .sort-button
     margin-left 20px
@@ -227,6 +229,8 @@
         border 1px solid $theme-color
         border-radius 4px
         margin-top 20px
+        max-height 400px
+        overflow auto
         .note-item
           display flex
           justify-content space-between

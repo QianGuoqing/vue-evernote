@@ -74,6 +74,7 @@
           console.log(res)
           this.$Message.success(res.msg)
           this._getNote(this.$route.query.notebookId)
+          this.newNoteTitle = ''
         }).catch(err => {
           this.$Message.error('添加笔记失败')
         })
@@ -141,9 +142,11 @@
 
 <style lang="stylus" scoped>
   @import '../common/stylus/variables.styl';
+  @import '../common/stylus/styles.styl';
   .note-sidebar
     width 300px
-    height 100%
+    max-height 100%
+    overflow auto
     background-color $notebook-bg
     margin-left 100px
     border-right 1px solid $line-color

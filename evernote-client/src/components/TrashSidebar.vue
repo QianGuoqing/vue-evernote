@@ -86,9 +86,11 @@
 
 <style lang="stylus" scoped>
   @import '../common/stylus/variables.styl';
+  @import '../common/stylus/styles.styl';
   .trash-sidebar
     width 300px
-    height 100%
+    max-height 100%
+    overflow auto
     background-color $notebook-bg
     margin-left 100px
     border-right 1px solid $line-color

@@ -1,0 +1,16 @@
+  @import './variables.styl';
+  /*滚动条 start*/
+  ::-webkit-scrollbar
+    width 4px
+    height 4px
+    background-color: $theme-color
+  /*定义滚动条轨道 内阴影+圆角*/
+  ::-webkit-scrollbar-track
+    background #fff
+  /*定义滑块 内阴影+圆角*/
+  ::-webkit-scrollbar-thumb 
+    border-radius 3px
+    background-color rgba(7, 170, 247, 0.7)
+  ::-webkit-scrollbar-thumb:hover 
+    border-radius 3px
+    background-color rgba(7, 170, 247, 1)
