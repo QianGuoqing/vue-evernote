@@ -12,6 +12,17 @@
   export default {
     name: 'Home',
     created() {
+      getDataByGet(API_AUTH).then(res => {
+        res = res.data
+        if (!res.isLogin) {
+          this.$Message.error('没有权限-请先登录')
+          this.$router.push({
+            path: '/login'
+          })
+        } else {
+          this.$store.commit('setUsername', res.data.username)
+        }
+      })
       this._getAuth()
     },
     data() {

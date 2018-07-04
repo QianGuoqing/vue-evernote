@@ -61,6 +61,7 @@
           })
         } else {
           this.$store.commit('setUser', res.data)
+          this.$store.commit('setUsername', res.data.username)
         }
       })
       this.$store.commit('setTrashNote', {})
