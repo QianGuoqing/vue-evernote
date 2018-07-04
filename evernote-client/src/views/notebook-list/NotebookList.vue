@@ -13,13 +13,14 @@
     <div class="notebook-list-wrapper">
       <Alert class="note-label">
         笔记本列表 (<span class="list-count">{{ notebookTotal }}</span>)
+        <Input v-model="searchNotebookText" @on-change="searchNotebook" class="search-notebook" placeholder="搜索笔记本..." style="width: 40%"></Input>
         <Button class="sort-button" type="success" size="small" @click="sortListByNoteCounts">按笔记数量排序</Button>
         <Button type="success" size="small" @click="sortListByUpdate">按笔记更新时间排序</Button>
         <Button type="success" size="small" @click="sortListByCreate">按笔记创建时间排序</Button>
       </Alert>
       <ul class="note-list">
         <transition-group>
-          <li @click="changeIDinState(notebook.id)" class="note-item" v-for="notebook in notebooksList" :key="notebook.id">
+          <li @click="changeIDinState(notebook.id)" class="note-item" v-for="notebook in searchedNotebookList" :key="notebook.id">
             <div class="icon-name">
               <Icon type="ios-paper" />
               <span class="note-title">{{ notebook.title }}</span>
@@ -78,6 +79,8 @@
     data() {
       return {
         notebooksList: [],
+        searchedNotebookList: [],
+        searchNotebookText: '',
         notebookTotal: 0,
         addNewNotebookModal: false,
         editNotebookModal: false,
@@ -95,6 +98,19 @@
       },
       sortListByCreate() {
         this.notebooksList.sort((a, b) => a.createdAt < b.createdAt)
+      },
+      searchNotebook() {
+        if (this.searchNotebookText.length === 0) {
+          this.searchedNotebookList = this.notebooksList
+        } else {
+          let tempNotebookList = []
+          this.notebooksList.forEach(notebook => {
+            if (notebook.title.indexOf(this.searchNotebookText) > -1) {
+              tempNotebookList.push(notebook)
+            }
+          })
+          this.searchedNotebookList = tempNotebookList
+        }
       },
       changeIDinState(notebookId) {
         console.log('changeIDinState');
@@ -196,6 +212,8 @@
       margin 20px auto
       .note-label
         font-size 14px
+        .search-notebook
+          margin-left 20px
         .list-count
           font-weight 700
       .note-list
