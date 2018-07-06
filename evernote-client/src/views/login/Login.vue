@@ -47,7 +47,7 @@
                   </Input>
                 </FormItem>
                 <FormItem prop="password">
-                  <Input class="input-password" type="password" v-model="register.password" placeholder="密码">
+                  <Input class="input-password" type="password" v-model="register.password" placeholder="密码" @on-enter="onRegister">
                   <Icon type="ios-locked-outline" slot="prepend"></Icon>
                   </Input>
                 </FormItem>
@@ -70,7 +70,7 @@
                   </Input>
                 </FormItem>
                 <FormItem prop="password">
-                  <Input class="input-password" type="password" v-model="login.password" placeholder="密码">
+                  <Input class="input-password" type="password" v-model="login.password" placeholder="密码" @on-enter="onLogin">
                   <Icon type="ios-locked-outline" slot="prepend"></Icon>
                   </Input>
                 </FormItem>
@@ -145,6 +145,9 @@
       }
     },
     methods: {
+      test() {
+        console.log('test');
+      },
       onLogin() {
         getDataByPost(API_LOGIN, {
           username: this.login.username,
