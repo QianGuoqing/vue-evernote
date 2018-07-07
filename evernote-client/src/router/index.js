@@ -15,27 +15,27 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: () => import('../components/Home.vue')
     },
     {
       path: '/login',
       name: 'Login',
-      component: Login
+      component: () => import('../views/login/Login.vue')
     },
     {
       path: '/notebook-list',
       name: 'NotebookList',
-      component: NotebookList
+      component: () => import('../views/notebook-list/NotebookList.vue')
     },
     {
       path: '/note',
       name: 'NoteDetail',
-      component: NoteDetail
+      component: () => import('../views/note-detail/NoteDetail.vue')
     },
     {
       path: '/trash',
       name: 'TrashDetail',
-      component: TrashDetail
+      component: () => import('../views/trash-detail/TrashDetail.vue')
     }
   ]
 })
