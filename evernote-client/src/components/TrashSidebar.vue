@@ -49,7 +49,6 @@
             this.chooseTrashNote = this.notes[index]
           }
         })
-        console.log('chooseTrashNote', this.chooseTrashNote)
         this.$store.commit('setTrashNote', this.chooseTrashNote)
         this.$router.push({
           path: `/trash?noteId=${note.id}`
@@ -61,22 +60,10 @@
           this.notes = res.data
           this.notes.sort((a, b) => a.updatedAt < b.updatedAt)
           this.$store.commit('setAllTrashNotes', this.notes)
-          console.log('get trash', this.notes)
         }).catch(err => {
           this.$Message.error('获取废纸篓数据失败')
-          console.log('get trash', err)
         })
       },
-      // _getNote(notebookId, noteId) {
-      //   getNote(notebookId).then(res => {
-      //     res = res.data
-      //     this.nNotes = res.data
-      //     this.chooseTrashNote = this.nNotes.find(note => note.id == noteId)
-      //     console.log('chooseTrashNote', this.chooseTrashNote, this.nNotes)
-      //   }).catch(err => {
-      //     this.$Message.error('获取笔记失败 in Trash Sidebar')
-      //   })
-      // },
       _formateDate(dateStr) {
         return friendlyDate(dateStr)
       }

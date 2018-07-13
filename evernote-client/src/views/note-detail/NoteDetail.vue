@@ -111,7 +111,6 @@
           return md.render(this.currentNote.content)
         } else if (this.isRichText) {
           let html = this.$store.state.richText
-          console.log(html);
           return html
         }
       }
@@ -162,7 +161,6 @@
           })
           tempNotes.splice(iIndex, 1)
           this.$store.commit('setAllNotes', tempNotes)
-          console.log(res)
           this.$Message.success(res.msg)
           this.$router.push({
             path: `/note?notebookId=${this.$route.query.notebookId}`

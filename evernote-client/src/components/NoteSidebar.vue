@@ -71,7 +71,6 @@
       doAddNote() {
         addNote(this.$route.query.notebookId, this.newNoteTitle, '').then(res => {
           res = res.data
-          console.log(res)
           this.$Message.success(res.msg)
           this._getNote(this.$route.query.notebookId)
           this.newNoteTitle = ''
@@ -91,7 +90,6 @@
         })
         this.currentNote = this.notes.find(note => note.id == this.$store.state.noteId) || {}
         this.$store.commit('setCurrentNote', this.currentNote)
-        console.log('note siderbar get note', this.currentNote) 
       },
       doGetNote(notebookId) {
         this._getNote(notebookId)
@@ -110,7 +108,6 @@
           if (this.notes.length === 0) {
             this.$Message.info('该笔记本下暂无笔记')
           }
-          console.log('note sidebar get note', this.notes)
         }).catch(err => {
           this.$Message.error('获取笔记失败')
         })
@@ -122,13 +119,11 @@
           this.notebooks.sort((a, b) => a.createdAt < b.createdAt)
           if (!this.$route.query.notebookId) {
             this.currentNotebook = this.notebooks[0]
-            console.log(this.currentNotebook);
             this._getNote(this.currentNotebook.id)
           } else {
             this.currentNotebook = this.notebooks.find(notebook => notebook.id == this.$route.query.notebookId)
             this._getNote(this.currentNotebook.id)
           }
-          console.log('note sidebar notebooklist', this.notebooks)
         }).catch(err => {
           this.$Message.error('获取笔记本失败')
         })

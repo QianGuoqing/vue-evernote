@@ -13,13 +13,6 @@
   import { getDataByGet } from '../common/js/request.js'
   export default {
     name: 'Avatar',
-    created() {
-      // getDataByGet(API_AUTH).then(res => {
-      //   res = res.data
-      //   this.currentUserName = res.data.username
-      //   this.$store.commit('setUsername', this.currentUserName)
-      // })
-    },
     computed: {
       ...mapState(['username']),
       capitalName() {

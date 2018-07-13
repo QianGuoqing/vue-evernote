@@ -145,9 +145,6 @@
       }
     },
     methods: {
-      test() {
-        console.log('test');
-      },
       onLogin() {
         getDataByPost(API_LOGIN, {
           username: this.login.username,

@@ -133,9 +133,8 @@
           this.$Message.success(res.msg)
           this._getNotebookList()
           this.newNotebookTitle = ''
-          console.log('add notebook', res)
         }).catch(err => {
-          console.log('add notebook', err)
+          this.$Message.error('网络错误')
         })
       },
       addNewNotebookCancel() {
@@ -154,7 +153,6 @@
           console.log('update notebook', res)
         }).catch(err => {
           this.$Message.error('更新笔记本失败')
-          console.log('delete notebook', err)
         })
       },
       editNotebookCancel() {
@@ -169,10 +167,8 @@
               res = res.data
               this.$Message.success(res.msg)
               this._getNotebookList()
-              console.log('delete notebook', res)
             }).catch(err => {
               this.$Message.error('删除笔记本失败')
-              console.log('delete notebook', err)
             })
           },
           onCancel: () => {
@@ -190,9 +186,8 @@
           this.notebooksList.sort((a, b) => a.createdAt < b.createdAt)
           this.notebookTotal = this.notebooksList.length
           this.searchedNotebookList = this.notebooksList
-          console.log('notebook list', this.notebooksList)
         }).catch(err => {
-          console.log(err)
+          this.$Message.error('网络错误')
         })
       }
     },
