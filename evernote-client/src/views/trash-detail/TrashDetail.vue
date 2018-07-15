@@ -89,7 +89,6 @@
           revertNote(noteId).then(res => {
             res = res.data
             this.$Message.success(res.msg)
-            console.log(res)
             let tempTrashNotes = [...this.allTrashNotes]
             let iIndex = 0
             tempTrashNotes.forEach((note, index) => {

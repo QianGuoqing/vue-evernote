@@ -151,6 +151,7 @@
           password: this.login.password
         }).then(res => {
           res = res.data
+          console.log('login', res);
           this.$Message.success(res.msg)
           this.$store.commit('setUsername', this.login.username)
           this.$store.commit('setUser', res.data)
@@ -168,6 +169,7 @@
           password: this.register.password
         }).then(res => {
           res = res.data
+          console.log('register', res)
           this.$Message.success(res.msg)
           this._clearRegister()
         }).catch(err => {
