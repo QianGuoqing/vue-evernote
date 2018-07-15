@@ -51,7 +51,6 @@
       onLogout() {
         getDataByGet(API_AUTH).then(res => {
           res = res.data
-          console.log('siderbar auth', res)
           if (res.isLogin) {
             getDataByGet(API_LOGOUT).then(res => {
               res = res.data
