@@ -5,10 +5,12 @@ import App from './App'
 import router from './router'
 import store from './store'
 import iView from 'iview'
+import VueParticles from 'vue-particles'
 import 'iview/dist/styles/iview.css'
 import './common/css/reset.css'
 
 Vue.use(iView)
+Vue.use(VueParticles)
 
 Vue.config.productionTip = false
 
