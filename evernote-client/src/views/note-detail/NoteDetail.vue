@@ -24,16 +24,6 @@
               使用Markdown编辑
             </span>
           </Button>
-          <Button :disabled="!isEdit" @click="changeEditRich" type="success" size="small">
-            <span v-if="!isRichText">
-              <Icon type="paper-airplane"></Icon>
-              转富文本
-            </span>
-            <span v-else>
-              <Icon type="edit"></Icon>
-              使用富文本编辑
-            </span>
-          </Button>
           <Button @click="doDeleteNote" type="error" size="small">
             <Icon type="trash-b"></Icon>
             删除
@@ -52,9 +42,9 @@
           <input :disabled="isEdit" type="text" v-model:value="currentNote.title" class="title-input" placeholder="输入笔记标题">
         </div>
         <div class="note-editor">
-          <note-editor  v-if="!isRichText"></note-editor>
-          <textarea v-if="!isEdit" class="editor-content" placeholder="输入笔记内容" v-model:value="currentNote.content"></textarea>
-          <div class="note-content" v-html="editText2Html" v-else></div>
+          <!-- <textarea v-if="!isEdit" class="editor-content" placeholder="输入笔记内容" v-model:value="currentNote.content"></textarea>
+          <div class="note-content" v-html="editText2Html" v-else></div> -->
+          <i-editor class="ii-editor" v-model="currentNote.content"></i-editor>
         </div>
       </div>
     </div>
@@ -98,7 +88,8 @@
         isEdit: true,
         statusText: '已完成',
         isRichText: true,
-        editorContent: ''
+        editorContent: '',
+        content: ''
       }
     },
     computed: {
@@ -175,12 +166,16 @@
 
 <style lang="stylus" scoped>
   @import '../../common/stylus/variables.styl';
+
+  .notebook-detail >>> .ivu-input
+    height 400px
+
   .notebook-detail
     width 100%
     height 100%
     display flex
     align-items stretch
-    // overflow hidden
+    overflow hidden
     .choose-note
       font-size 40px
       text-align center
